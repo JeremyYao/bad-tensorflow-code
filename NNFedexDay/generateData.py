@@ -5,8 +5,9 @@ def isEven(in_num: float) -> bool:
     return in_num % 2 == 0
 
 
+increment_amount = 3
 train_test_data_ratio = 0.1
-iterations = 900000
+iterations = 90000
 file_name_input = "input.txt"
 file_name_labels = "labels.txt"
 
@@ -18,26 +19,40 @@ test_data_file_stream = open('test_data.csv', 'w')
 
 num = 0
 for iteration in range(iterations):
-    scalar = -1 if num % 2 == 0 else 1
+    scalar = -1 if iteration % 2 == 0 else 1
     curr_num = scalar * num
     result = isEven(curr_num)
     data_dict[curr_num] = "even" if result else "odd"
-    num += randint(1, 3)
+    num += randint(0, increment_amount)
+
+num = 0
+for iteration in range(iterations):
+    scalar = -1 if iteration % 2 == 0 else 1
+    curr_num = float(scalar * num)
+    result = isEven(curr_num)
+    data_dict[curr_num] = "even" if result else "odd"
+    num += randint(0, increment_amount)
+
+num = 0.0000099
+for iteration in range(iterations):
+    scalar = -1 if iteration % 2 == 0 else 1
+    curr_num = scalar * num
+    result = isEven(curr_num)
+    data_dict[curr_num] = "even" if result else "odd"
+    num += random()*increment_amount
 
 # Write headers
-test_data_file_stream.write('Value,Result\n')
-train_data_file_stream.write('Value,Result\n')
+header_str = 'Value,Type,Result\n'
+test_data_file_stream.write(header_str)
+train_data_file_stream.write(header_str)
 
 # Put data inside
 for curr_num in data_dict.keys():
+    line_str = f"{curr_num},{type(curr_num)},{data_dict[curr_num]}\n"
     if (random() <= train_test_data_ratio):
-        test_data_file_stream.write(
-            # f"{curr_num},{type(curr_num)},{1 if data_dict[curr_num] == 'even' else 0}\n")
-            f"{curr_num},{data_dict[curr_num]}\n")
+        test_data_file_stream.write(line_str)
     else:
-        train_data_file_stream.write(
-            # f"{curr_num},{type(curr_num)},{1 if data_dict[curr_num] == 'even' else 0}\n")
-            f"{curr_num},{data_dict[curr_num]}\n")
+        train_data_file_stream.write(line_str)
 
 
 train_data_file_stream.close()
